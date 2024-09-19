@@ -1,0 +1,347 @@
+\documentclass[aspectratio=169]{beamer}
+\mode<presentation>
+{
+  \usetheme{CambridgeUS}      
+  \usecolortheme{beaver} 
+  \usefonttheme{structuresmallcapsserif} 
+  \setbeamertemplate{navigation symbol}{{
+  \insertslidenavigationsymbol
+  \insertframenavigationsymbol
+  \insertsubsectionnavigationsymbol
+  \insertsectionnavigationsymbol
+  \insertdocnavigationsymbol
+  \insertbackfindforwardnavigationsymbol
+}}
+  \setbeamertemplate{caption}[numbere]
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\title[Uncertainty Shocks]{A Novel Identification Strategy for Uncertainty Shocks}
+\author[Jha et. al]{\centering
+    \textbf{\centering Ayush Jha}\inst{1} \and 
+    \textbf{\centering Abootaleb Shirvani}\inst{2} \and \\
+    \vspace{0.2cm}
+    \textbf{\centering Svetlozar T. Rachev}\inst{3}
+}
+\institute[]{
+    \inst{1}Department of Economics, Texas Tech University \\
+    \inst{2}Department of Mathematical Sciences, Kean University \\
+    \inst{3}Department of Mathematics and Statistics, Texas Tech University
+}
+
+\date[TTU, 2024]{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\section{Introduction}
+\begin{frame}{Motivation}
+    \begin{itemize}
+    \item Traditional notions of uncertainty in macroeconomics and finance
+    \item Standard Deviation of VIX
+    \item Time-varying volatility measured using GARCH or Fractional-GARCH
+    \item \textbf{Key issues in these local volatility models}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Issues}
+\begin{enumerate}
+    \item VIX does not assume normality $\rightarrow$ using a symmetric measure of dispersion creates inaccurate shocks
+    \item In a complete market, an agent trading a risky asset and a riskless bond faces two channels of uncertainty:\\ 1. Time-varying nature of the asset return process\\
+    2. Skewness (3rd moment) and Fat-Tails (4th Moment) of Options Prices
+    \item Local Volatility models are not semi-martingales $\implies$ Fundamental Theorem of Asset Pricing fails
+\end{enumerate}
+\begin{itemize}
+    \item Need for a multiple subordinated model arises $\rightarrow$ able to capture both sources of uncertainty
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Identification Strategy}
+    \begin{itemize}
+        \item Shirvani et. al (2021) introduced the volatility subordinator model to reflect the heavy tail phenomenon present in asset returns
+        \item The VIX, as a measure of time change, does not
+              reflect all the information required to correctly capture the skewness and the fat–tail of the S\&P 500 index
+              \item We fit an NDIG L\'{e}vy process with a \textbf{\textit{Volatility Time-Intrinsic Subordinator}} and a \textbf{\textit{Heavy Tails Subordinator}}
+              \item Creates a new \textbf{VVIX} that adequately accounts for intrinsic time and heavy tails observed in the data
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{NDIG L\'{e}vy Process for Options Pricing}
+\begin{itemize}
+    \item NDIG captures the skewness and fat-tailed properties of the data distribution 
+    \item L\'{e}vy Subordinators:
+\end{itemize}
+\begin{equation*}
+    {T(s), s \geq 0, T(0)=0} \And {U(s), s \geq 0, U(0)=0}
+\end{equation*}
+%trajectories are right-continuous with left limits
+
+\begin{itemize}
+    \item Shirvani et. al (2021) referred to $T(U(t)),\;t\geq0$ as the \textit{\textbf{Double Subordinator Process}}
+    \item Hence, we can use these subordinators to model the S\&P500 Options Prices. Let $S_{t}$ denote the price process with dynamics:
+\end{itemize}
+\vspace{0.1cm}
+\begin{equation*}
+    S_{t} = e^{X_{t}},\;\;\;\;t \in [0,\tau] 
+\end{equation*}
+\begin{equation}
+     X_{t} = X_{0} + \mu_{3t} + {\gamma}U(t) + {\rho}T(U(t)) + {\sigma_{3}}B_{T( U(t))},
+\end{equation}
+\begin{equation*}
+    t\geq0,\;\mu_{3} \in R, \sigma > 0, X_{0} = ln(S_{0}), S_{0} > 0 
+\end{equation*}
+
+\end{frame}
+
+\begin{frame}{NDIG L\'{e}vy Process for Options Pricing}
+    \begin{figure}
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{VVIX Figures/Close.jpg}
+        \caption{Log of S\&P500 Options Prices}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{VVIX Figures/daily rtn.jpg}
+        \caption{Adj Close (S\&P500)}
+    \end{minipage}
+    %\caption{\centering{S\&P500 Asset Return Process}}
+    %\label{fig:sidebyside}
+\end{figure}
+
+\begin{itemize}
+    \item $T(U(t))$ will capture the volatility intrinsic time of the \textbf{\textit{Asset Return Process}}
+    \item $T(1) \sim IG(\mu_{T}, \lambda_{T})$ and $U(1) \sim IG(\mu_{U}, \lambda_{U})$
+    \item $T(U(t))$ becomes a double IG subordinator $\implies$ $X_{t}$ becomes a normal double IG (NDIG) log-price process
+\end{itemize}
+\end{frame}
+
+\begin{frame}{NDIG L\'{e}vy Process}
+    \begin{itemize}
+        \item S\&P500 options prices are modeled as subordinated Brownian motion
+        \item Multiple subordinated model sustains the bivariate semi-martingale structure
+        \item L\'{e}vy subordinators do not disrupt the S\&P500's time-changed process and sustains the property under Equivalent Martingale Measure \textbf{(EMM)} $\sim$ consistent with \textbf{FTAP}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[label = math]{NDIG L\'{e}vy Process}
+    \begin{enumerate}
+        \item PDF of subordinators following an IG L\'{e}vy process:
+    
+    \begin{equation*}
+        f_{T(1)}(x) = \sqrt{\frac{\lambda_{T}}{2{\pi}x^3}}exp{\frac{\lambda_{T}(x-\mu_{T})^2}{2\mu_{T}^2x}},\;\;\;\;x\geq0,\;\mu_{T}>0,\;\lambda_{T}>0
+    \end{equation*}
+    \vspace{0.3cm}
+        \item Therefore, $X_{t}$ follows an NDIG log-price process $\rightarrow$ $\therefore$ characteristic function of $X_{1}$:
+        \begin{equation*}
+            {\psi}x_{1}(v) = \mathbb{E}[e^{iv{x_{1}}}]
+        \end{equation*}
+        \vfill
+  \hfill
+  \hyperlink{chf}{\beamergotobutton{chf - $\psi$}}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{New Series of Shocks}
+\begin{itemize}
+    \item We compute Risk-Reward Ratios (R/R ratios) on the newly computed VVIX to capture potential losses (left tails) and gains (right tails) as a new identification strategy for \textbf{Uncertainty Shocks} (`JSR')
+\end{itemize}
+
+\begin{equation}
+    \alpha(X) = \frac{\theta(X)^+}{\rho(X)^+}
+\end{equation}
+
+for reward measure $\theta: X \rightarrow \mathbb{R} \cup {\{\pm\infty\}}$ and a risk measure $\rho: X \rightarrow \mathbb{R} \cup {\{\pm\infty\}}$. \\
+\vspace{0.5cm}
+The ratio $\alpha$ should satisfy the following two conditions:
+\begin{enumerate}
+     \item \textbf{(M)} Monotonicity: $\alpha(X)\geq\alpha(Y)\:\forall\:X,Y\in \mathcal{X}$ such that $X{\geq}Y$
+    \item \textbf{(Q)} Quasi-Concavity: $\alpha({\lambda}X + (1-\lambda)Y) > min({\alpha}(X), {\alpha}(Y)) \; \forall\; X,Y \in \mathcal{X}\; and \;\lambda \in \mathbb{R}$ such that $0 \leq \lambda \leq 1$.
+\end{enumerate}
+\end{frame}
+
+\section{Literature Review}
+\begin{frame}{Uncertainty and Tail Risk}
+    \begin{itemize}
+        \item Bloom (2009) identified the source of macro volatility in financial markets using std dev of VIX as a channel of uncertainty shock \pause
+        \item Orlik \& Veldkamp (2014) highlight the tail risk mechanism that accentuates uncertainty channels explaining the fluctuations in macroeconomic measure of uncertainty \pause
+        \item Kozeniauskas, Orlik, and Veldkamp (2018) emphasize tail risk by allowing for non-normal innovations in the TFP growth process $\sim$ rare disaster risk hypothesis
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Data Distribution and L\'{e}vy Subordination}
+    \begin{itemize}
+        \item Kozlowski et. al (2020) identifies that agents are unaware of the true distributions of shocks but use data to estimate it non-parametrically. \pause %However, transitory, especially extreme events, generate persistent changes in beliefs and macro outcomes.
+        \item Shirvani et. al (2023) propose the NDIG L\'{e}vy Subordination Process to Bitcoin prices to derive two BTC volatility measures.\\
+        1. Combines NDIG options pricing with CBOE VIX to compute implied volatility \\
+        2. Uses volatility of the unit time increment of the NDIG model \\ \pause
+        $\implies$ NDIG model perfectly captures observed, in sample, volatility 
+    \end{itemize}
+\end{frame}
+
+\section{Double Subordinated log-price process}
+
+\begin{frame}{BSM option pricing model}
+\begin{itemize}
+    \item $S_{t}$ is the price process and log-price process $X_{t}$ are defined as:
+\end{itemize}
+\vspace{0.2cm}
+    \begin{equation*}
+    S_{t}^{(BSM)} = e^{X_{t}^{(BSM)}},\;\;\;\;t \in [0,\tau] 
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+     X_{t}^{(BSM)} = X_{0} + \mu_{1t} + {\sigma_{1}}B_{t},
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+    \mu_{1} \in R, \sigma_{1} > 0, X_{0} = ln(S_{0}), S_{0} > 0 
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+    \mathbb{B} = (B_{t},\;t \geq 0)\;is\;a\;standard\;Brownian\;motion 
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Subordinated Brownian Motion}
+\begin{itemize}
+    \item Mandelbolt \& Taylor (1967) || Clark (1973) $\sim$ use of subordinated Brownian motion to allow for non-normality of asset returns:
+\end{itemize}
+\vspace{0.2cm}
+    \begin{equation*}
+    S_{t}^{(SS)} = e^{X_{t}^{(SS)}},\;\;\;\;t \in [0,\tau] 
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+     X_{t}^{(SS)} = X_{0} + \mu_{2t} + {\sigma_{2}}B_{T(t)},
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+    \mu_{2} \in R, \sigma_{2} > 0 
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+    \mathbb{T} = (T(t),\;t \geq 0,\;T(0)=0)\;is\;a\;L\text{\'{e}}vy\;subordinator 
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Double Subordination}
+\begin{itemize}
+    \item Double subordinated log-price process for S\&P500 Options Prices:
+\end{itemize}
+\vspace{0.5cm}
+\begin{equation*}
+    S_{t} = e^{X_{t}},\;\;\;\;t \in [0,\tau] 
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+     X_{t} = X_{0} + \mu_{3t} + {\gamma}U(t) + {\rho}T(U(t)) + {\sigma_{3}}B_{T( U(t))},
+\end{equation*}
+\vspace{0.1cm}
+\begin{equation*}
+    t\geq0,\;\mu_{3} \in R, \sigma > 0, X_{0} = ln(S_{0}), S_{0} > 0 
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Parameter Estimates}
+\begin{itemize}
+    \item 6 parameters $\rightarrow$ $\theta = (\mu_{3}, \lambda_{U}, \mu_{U}, \lambda_{T}, \mu_{T}, \sigma_{3})$ || \textbf{Moments of} $X$:
+    \end{itemize}
+    \vspace{0.3cm}
+  \begin{equation*}
+      1.\;\;E[X] = \mu_{3} + \rho
+  \end{equation*}
+  \vspace{0.1cm}
+  \begin{equation*}
+      2.\;\;Var[X] = \mu_{3}^2 + d\rho^2
+  \end{equation*}
+  \vspace{0.1cm}
+  \begin{equation*}
+      3.\;\;Skew[X] = \frac{3d\rho(\sigma_{3}^2 + \rho^2)}{(\sigma_{3}^2 + d\rho^2)^\frac{3}{2}}
+  \end{equation*}
+  \vspace{0.1cm}
+  \begin{equation*}
+      4\;\;Kurt[X] = \frac{3\sigma^{2}d + 6\rho^{2}\sigma(d^2 + 1\lambda_{T}^2 + 2\lambda_{U}^2) + \frac{15\rho^4}{\lambda_{U}^3}}{(\sigma_{3}^2 + d\rho^2)^2}
+  \end{equation*}
+  \vspace{0.1cm}
+    \begin{equation*}
+        where\;\;\;\sigma = \frac{\rho^2}{\lambda_{T}} + \sigma_{3}^2,\;d = \frac{1}{\lambda_{T}} + \frac{1}{\lambda_{U}}
+    \end{equation*}   
+\end{frame}
+
+\begin{frame}{NDIG Parameter Estimates}
+\begin{itemize}
+    \item Parameters estimated using the method of moments and empirically fitting the characteristic function 
+\end{itemize}
+\vspace{1cm}
+    \begin{table}
+    \centering
+    \begin{tabular}{ccccccc}
+    \hline
+    \hline
+        $\mu_{3}$ &  $\sigma_{3}$ & $\mu_{U}$ & $\lambda_{U}$ & $\mu_{T}$ & $\lambda_{T}$ & $\rho$\\
+    \hline
+         &  &  &  &  &  & \\
+    \hline
+    \end{tabular}
+    \vspace{1cm}
+    \caption{NDIG Parameter Estimates for the log of S\&P500 Options Prices}
+    \label{tab:1}
+\end{table}
+\end{frame}
+
+\section{Progress}
+\begin{frame}{Further Progress}
+    \begin{itemize}
+        \item Fit the code to the S\&P500 Options Prices and compare empirical and theoretical moments 
+        \item Construct a new VVIX to measure observed, in sample, volatility of the stock market 
+        \item Extensions of the work
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[label = chf]
+  \frametitle{Characteristic Function and MGF}
+  \begin{itemize}
+      \item CHF of $X_{1}$:
+  \end{itemize}
+\begin{equation*}
+    {\psi}x_{1}(v) = \mathbb{E}[e^{iv{x_{1}}}]
+\end{equation*}
+\vspace{0.2cm}
+\begin{equation*}
+    \therefore\;\;\mathbb{E}[e^{iv{x_{1}}}] = e^\left({iv}\mu_{3} + \frac{\lambda_{U}}{\mu_{U}}\left[1 -\sqrt{1-\frac{2\mu_{U}^2}{\lambda_{U}}\left(\frac{\lambda_{T}}{\mu_{T}}\left(1-\sqrt{1-\frac{\mu_{T}^2}{\lambda_{T}}(2iv\rho - \sigma_{3}^2v^2)}\right)\right)} + iv\lambda\right]\right)
+\end{equation*}
+\begin{itemize}
+    \item MGF of $X_{1}$:
+\end{itemize}
+\begin{equation*}
+    M_{X_{1}}(w) = \mathbb{E}[e^{wX_{1}}],\;where\;w\in\mathbb{R}
+\end{equation*}
+  \hfill
+  \hyperlink{math}{\beamergotobutton{NDIG}}
+\end{frame}
+
+\end{document}
+
